@@ -3,6 +3,7 @@
   "package": "eigencraft.motionprint.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ServerWorldMixin"
   ],
   "client": [
   ],
