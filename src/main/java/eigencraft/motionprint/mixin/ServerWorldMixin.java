@@ -25,6 +25,8 @@ public class ServerWorldMixin {
             player.getX();
             player.getY();
             player.getZ();
+            player.getHeadYaw();
+            player.getHorizontalFacing();
         }
     }
 }
