@@ -1,10 +1,13 @@
 package eigencraft.motionprint.data;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
 
 public class LoggingManager {
     public static final LoggingManager INSTANCE = new LoggingManager();
@@ -32,6 +35,39 @@ public class LoggingManager {
     public void flushData() {
         for (PlayerStatusLogger logger : this.playerLoggers.values()) {
             logger.flushData();
+        }
+    }
+
+    public void rotateSessions(ServerCommandSource source) {
+        MinecraftServer server = source.getMinecraftServer();
+
+        if (server != null) {
+            HashSet<UUID> keys = new HashSet<>(this.playerLoggers.keySet());
+            long currentTime = System.currentTimeMillis();
+            int count = 0;
+
+            for (UUID uuid : keys) {
+                PlayerStatusLogger logger = this.playerLoggers.get(uuid);
+
+                if (logger != null) {
+                    logger.flushData();
+                }
+
+                PlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+
+                if (player != null) {
+                    this.playerLoggers.put(uuid, new PlayerStatusLogger(uuid, player.getName().getString(), currentTime));
+                    ++count;
+                }
+                else {
+                    this.playerLoggers.remove(uuid);
+                }
+            }
+
+            source.sendFeedback(new LiteralText("Re-started/rolled " + count + " logging sessions"), false);
+        }
+        else {
+            source.sendError(new LiteralText("Failed to get the server instance"));
         }
     }
 

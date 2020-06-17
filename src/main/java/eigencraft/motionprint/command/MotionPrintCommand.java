@@ -14,6 +14,7 @@ public class MotionPrintCommand {
                 CommandManager.literal(baseCommandName)
                         .requires((src) -> src.hasPermissionLevel(permissionLevel))
                         .then(SubCommandFlushData.registerSubCommand(dispatcher))
+                        .then(SubCommandRotateSessions.registerSubCommand(dispatcher))
                         .then(SubCommandSetEnabled.registerSubCommand(dispatcher))
                         .then(SubCommandSetLoggingInterval.registerSubCommand(dispatcher))
         );
