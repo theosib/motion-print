@@ -1,29 +1,27 @@
 {
   "schemaVersion": 1,
   "id": "motion-print",
-  "version": "${version}",
   "name": "Motion Print",
+  "version": "${version}",
   "description": "Logs all players' positions and logs them on the server",
   "authors": [
-    "AMereBagatelle"
+    "AMereBagatelle",
+    "masa"
   ],
   "contact": {
+    "issues": "https://github.com/theosib/motion-print/issues",
     "sources": "https://github.com/theosib/motion-print"
   },
   "license": "CC0-1.0",
   "icon": "assets/motion-print/icon.png",
   "environment": "*",
   "entrypoints": {
-    "server": [
+    "main": [
       "eigencraft.motionprint.MotionPrint"
     ]
   },
   "mixins": [
     "motion-print.mixins.json"
   ],
-  "depends": {
-    "fabricloader": ">=0.8.7+build.201",
-    "fabric": "*",
-    "minecraft": "1.15.2"
-  }
+  "depends": {}
 }
