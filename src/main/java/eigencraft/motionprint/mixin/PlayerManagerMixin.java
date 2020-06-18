@@ -8,6 +8,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +19,7 @@ public class PlayerManagerMixin {
     @Inject(method = "onPlayerConnect", at = @At("TAIL"))
     public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
         MotionPrint.currentPlayer = player;
-        player.sendChatMessage(new LiteralText("Do you consent? Respond with \"yes\" or \"no\"."), MessageType.SYSTEM);
+        player.sendChatMessage(new TranslatableText("consent.askMessage"), MessageType.SYSTEM);
     }
 
     @Inject(method = "broadcastChatMessage", at = @At("TAIL"))
@@ -26,12 +27,12 @@ public class PlayerManagerMixin {
         String message = text.asFormattedString().substring(text.asFormattedString().indexOf(">")+2);
         if(!MotionPrint.hasConsented) {
             if (message.equalsIgnoreCase("yes")) {
-                MotionPrint.currentPlayer.sendChatMessage(new LiteralText("Thanks for your consent!"), MessageType.SYSTEM);
+                MotionPrint.currentPlayer.sendChatMessage(new LiteralText("consent.replyToYes"), MessageType.SYSTEM);
                 MotionPrint.hasConsented = true;
             } else if (message.equalsIgnoreCase("no")) {
-                MotionPrint.currentPlayer.sendChatMessage(new LiteralText("No?"), MessageType.SYSTEM);
+                MotionPrint.currentPlayer.sendChatMessage(new TranslatableText("consent.replyToNo"), MessageType.SYSTEM);
             } else {
-                MotionPrint.currentPlayer.sendChatMessage(new LiteralText("Please answer \"yes\" or \"no\"."), MessageType.SYSTEM);
+                MotionPrint.currentPlayer.sendChatMessage(new TranslatableText("consent.replyToOther"), MessageType.SYSTEM);
             }
         }
     }

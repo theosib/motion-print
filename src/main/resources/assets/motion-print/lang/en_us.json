@@ -1,0 +1,6 @@
+{
+  "consent.askMessage": "Do you consent? Respond with \"yes\" or \"no\".",
+  "consent.replyToYes": "Thanks for your consent!",
+  "consent.replyToNo": "No?",
+  "consent.replyToOther": "Please answer \"yes\" or \"no\"."
+}
