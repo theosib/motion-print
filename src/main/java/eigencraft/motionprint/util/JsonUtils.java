@@ -40,6 +40,16 @@ public class JsonUtils {
         return false;
     }
 
+    public static boolean hasArray(JsonObject obj, String name) {
+        JsonElement el = obj.get(name);
+
+        if (el != null && el.isJsonArray()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean getBooleanOrDefault(JsonObject obj, String name, boolean defaultValue) {
         if (obj.has(name) && obj.get(name).isJsonPrimitive()) {
             try {
@@ -60,6 +70,22 @@ public class JsonUtils {
         }
 
         return defaultValue;
+    }
+
+    @Nullable
+    public static JsonObject getNestedObject(JsonObject parent, String key, boolean create) {
+        if (parent.has(key) == false || parent.get(key).isJsonObject() == false) {
+            if (create == false) {
+                return null;
+            }
+
+            JsonObject obj = new JsonObject();
+            parent.add(key, obj);
+            return obj;
+        }
+        else {
+            return parent.get(key).getAsJsonObject();
+        }
     }
 
     @Nullable

@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import eigencraft.motionprint.MotionPrint;
 import eigencraft.motionprint.Reference;
+import eigencraft.motionprint.data.ConsentTracker;
 import eigencraft.motionprint.data.LoggingManager;
 import eigencraft.motionprint.util.JsonUtils;
 
@@ -20,7 +21,7 @@ public class Configs
         return gameDirectory;
     }
 
-    private static File getConfigDirectory() {
+    public static File getConfigDirectory() {
         File dir = new File(gameDirectory, "config");
 
         try {
@@ -39,32 +40,28 @@ public class Configs
         return Reference.MOD_ID + ".json";
     }
 
-    private static void readConfigFromJson(JsonObject obj) {
-        LoggingManager.INSTANCE.setEnabled(JsonUtils.getBooleanOrDefault(obj, "enabled", true));
-        LoggingManager.INSTANCE.setLoggingInterval(JsonUtils.getIntegerOrDefault(obj, "interval", 1));
-    }
-
-    private static JsonObject writeConfigToJson() {
-        JsonObject obj = new JsonObject();
-        obj.add("enabled", new JsonPrimitive(LoggingManager.INSTANCE.isEnabled()));
-        obj.add("interval", new JsonPrimitive(LoggingManager.INSTANCE.getLoggingInterval()));
-        return obj;
+    private static File getConfigFile() {
+        return new File(getConfigDirectory(), getConfigFileName());
     }
 
     public static void readConfigsFromFile() {
-        File configFile = new File(getConfigDirectory(), getConfigFileName());
+        JsonElement element = JsonUtils.parseJsonFile(getConfigFile());
 
-        if (configFile.exists() && configFile.isFile() && configFile.canRead()) {
-            JsonElement element = JsonUtils.parseJsonFile(configFile);
+        if (element != null && element.isJsonObject()) {
+            JsonObject obj = element.getAsJsonObject();
+            JsonObject nested = JsonUtils.getNestedObject(obj, "generic", false);
 
-            if (element != null && element.isJsonObject()) {
-                readConfigFromJson(element.getAsJsonObject());
+            if (nested != null) {
+                LoggingManager.INSTANCE.fromJson(obj);
             }
         }
     }
 
     public static void writeConfigsToFile() {
-        File configFile = new File(getConfigDirectory(), getConfigFileName());
-        JsonUtils.writeJsonToFile(GSON, writeConfigToJson(), configFile);
+        JsonObject obj = new JsonObject();
+
+        obj.add("generic", LoggingManager.INSTANCE.toJson());
+
+        JsonUtils.writeJsonToFile(GSON, obj, getConfigFile());
     }
 }
