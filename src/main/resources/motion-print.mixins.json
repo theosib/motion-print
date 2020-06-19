@@ -6,7 +6,9 @@
   "mixins": [
     "MixinCommandManager",
     "MixinMinecraftServer",
-    "MixinPlayerManager"
+    "MixinPlayerEntity",
+    "MixinPlayerManager",
+    "MixinServerPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1

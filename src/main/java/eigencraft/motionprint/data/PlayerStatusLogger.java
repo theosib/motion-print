@@ -15,7 +15,7 @@ import eigencraft.motionprint.MotionPrint;
 import eigencraft.motionprint.config.Configs;
 
 public class PlayerStatusLogger {
-    protected final List<PlayerStatusData> data = new ArrayList<>();
+    protected final List<IDataEntry> data = new ArrayList<>();
     protected final UUID playerUuid;
     protected final String playerName;
     protected final long loginTime;
@@ -27,7 +27,11 @@ public class PlayerStatusLogger {
     }
 
     public void logPlayerStatus(PlayerEntity player, int flushInterval) {
-        this.data.add(PlayerStatusData.of(player));
+        this.logData(PlayerStatusData.of(player), flushInterval);
+    }
+
+    public void logData(IDataEntry data, int flushInterval) {
+        this.data.add(data);
 
         if (this.data.size() > flushInterval) {
             this.flushData();
@@ -37,8 +41,8 @@ public class PlayerStatusLogger {
     public void flushData() {
         ArrayList<String> lines = new ArrayList<>();
 
-        for (PlayerStatusData data : this.data) {
-            lines.add(data.formatData());
+        for (IDataEntry data : this.data) {
+            lines.add(data.getFormattedOutput());
         }
 
         this.writeDataToFile(lines);
