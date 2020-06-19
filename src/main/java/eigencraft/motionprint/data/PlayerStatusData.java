@@ -2,15 +2,17 @@ package eigencraft.motionprint.data;
 
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import eigencraft.motionprint.util.IPlayerVelocityGetter;
 
 public class PlayerStatusData implements IDataEntry
 {
     protected final DimensionType dim;
-    protected final Vec3d velocity;
     protected final Vec3d pos;
+    protected final Vec3d velocity;
     protected final float yaw;
     protected final float pitch;
     protected final long worldTick;
@@ -18,11 +20,11 @@ public class PlayerStatusData implements IDataEntry
     protected final boolean onGround;
     @Nullable protected final String event;
 
-    private PlayerStatusData(DimensionType dim, Vec3d velocity, Vec3d pos, float yaw, float pitch,
+    private PlayerStatusData(DimensionType dim, Vec3d pos, Vec3d velocity, float yaw, float pitch,
                              long worldTick, boolean sneaking, boolean onGround, @Nullable String event) {
         this.dim = dim;
-        this.velocity = velocity;
         this.pos = pos;
+        this.velocity = velocity;
         this.yaw = yaw;
         this.pitch = pitch;
         this.worldTick = worldTick;
@@ -51,9 +53,11 @@ public class PlayerStatusData implements IDataEntry
     public static PlayerStatusData withEvent(PlayerEntity player, @Nullable String event) {
     
         World world = player.getEntityWorld();
+        Vec3d pos = player.getPos();
+        Vec3d velocity = player instanceof ServerPlayerEntity ? ((IPlayerVelocityGetter) player).getLastVelocity() : Vec3d.ZERO;
 
         return new PlayerStatusData(world.getDimension().getType(),
-                                    player.getVelocity(), player.getPos(),
+                                    pos, velocity,
                                     player.getYaw(0f), player.getPitch(0f),
                                     world.getTime(), player.isSneaking(), player.onGround, event);
     }
