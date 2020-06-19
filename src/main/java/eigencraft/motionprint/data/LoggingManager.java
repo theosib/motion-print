@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
+import eigencraft.motionprint.config.Configs;
 import eigencraft.motionprint.util.JsonUtils;
 
 public class LoggingManager {
@@ -27,6 +28,7 @@ public class LoggingManager {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        Configs.writeConfigsToFile();
     }
 
     public int getLoggingInterval() {
@@ -35,6 +37,7 @@ public class LoggingManager {
 
     public void setLoggingInterval(int interval) {
         this.loggingInterval = interval;
+        Configs.writeConfigsToFile();
     }
 
     public int getFlushInterval() {
@@ -43,6 +46,7 @@ public class LoggingManager {
 
     public void setFlushInterval(int interval) {
         this.flushInterval = interval;
+        Configs.writeConfigsToFile();
     }
 
     public void clear() {
@@ -164,8 +168,8 @@ public class LoggingManager {
     }
 
     public void fromJson(JsonObject obj) {
-        this.setEnabled(JsonUtils.getBooleanOrDefault(obj, "enabled", true));
-        this.setFlushInterval(JsonUtils.getIntegerOrDefault(obj, "flush_interval", 240));
-        this.setLoggingInterval(JsonUtils.getIntegerOrDefault(obj, "logging_interval", 5));
+        this.enabled = JsonUtils.getBooleanOrDefault(obj, "enabled", true);
+        this.flushInterval = JsonUtils.getIntegerOrDefault(obj, "flush_interval", 240);
+        this.loggingInterval = JsonUtils.getIntegerOrDefault(obj, "logging_interval", 5);
     }
 }
