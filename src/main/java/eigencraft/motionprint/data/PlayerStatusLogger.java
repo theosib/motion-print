@@ -26,10 +26,10 @@ public class PlayerStatusLogger {
         this.loginTime = loginTime;
     }
 
-    public void logPlayerStatus(PlayerEntity player) {
+    public void logPlayerStatus(PlayerEntity player, int flushInterval) {
         this.data.add(PlayerStatusData.of(player));
 
-        if (this.data.size() > 10000) {
+        if (this.data.size() > flushInterval) {
             this.flushData();
         }
     }
