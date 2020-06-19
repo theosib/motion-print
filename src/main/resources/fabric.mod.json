@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "motion-print",
   "name": "Motion Print",
-  "version": "${version}",
+  "version": "${mod_version}",
   "description": "Logs all players' positions and logs them on the server",
   "authors": [
     "AMereBagatelle",
