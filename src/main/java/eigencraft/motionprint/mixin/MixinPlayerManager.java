@@ -30,4 +30,9 @@ public abstract class MixinPlayerManager {
     private void onPlayerRespawn(ServerPlayerEntity player, DimensionType dimension, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir) {
         LoggingManager.INSTANCE.onPlayerEvent(cir.getReturnValue(), "RESPAWN|" + Registry.DIMENSION_TYPE.getId(player.dimension).toString());
     }
+
+    @Inject(method = "method_14594", at = @At("RETURN"))
+    private void onPlayerChangedDimension(ServerPlayerEntity player, CallbackInfo ci) {
+        LoggingManager.INSTANCE.onPlayerEvent(player, "CHANGED_DIMENSION|" + Registry.DIMENSION_TYPE.getId(player.dimension).toString());
+    }
 }
