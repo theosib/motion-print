@@ -50,6 +50,10 @@ public class PlayerStatusLogger {
     }
 
     protected void writeDataToFile(List<String> lines) {
+        if (lines.isEmpty()) {
+            return;
+        }
+
         File dir = getOutputDirectory();
 
         if (dir == null) {
