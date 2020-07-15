@@ -106,10 +106,12 @@ public class LoggingManager {
     }
 
     public void onPlayerEvent(PlayerEntity player, String event) {
-        PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
+        if (this.enabled) {
+            PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
 
-        if (logger != null) {
-            logger.logData(PlayerStatusData.withEvent(player, event), this.getFlushInterval());
+            if (logger != null) {
+                logger.logData(PlayerStatusData.withEvent(player, event), this.getFlushInterval());
+            }
         }
     }
 
