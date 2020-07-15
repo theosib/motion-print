@@ -11,9 +11,7 @@ import eigencraft.motionprint.data.ConsentTracker;
 public class GrantConsentCommand {
     public static void registerServerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
-                CommandManager.literal("motion-print-grant-consent")
-                        //.requires((src) -> src.hasPermissionLevel(permissionLevel))
-                        .executes(c -> grantConsent(c.getSource()))
+                CommandManager.literal("motion-print-grant-consent").executes(c -> grantConsent(c.getSource()))
         );
     }
 

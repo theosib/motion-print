@@ -11,9 +11,7 @@ import eigencraft.motionprint.data.ConsentTracker;
 public class RevokeConsentCommand {
     public static void registerServerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(
-                CommandManager.literal("motion-print-revoke-consent")
-                        //.requires((src) -> src.hasPermissionLevel(permissionLevel))
-                        .executes(c -> revokeConsent(c.getSource()))
+                CommandManager.literal("motion-print-revoke-consent").executes(c -> revokeConsent(c.getSource()))
         );
     }
 
