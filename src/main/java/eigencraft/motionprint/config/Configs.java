@@ -52,7 +52,7 @@ public class Configs
             JsonObject nested = JsonUtils.getNestedObject(obj, "generic", false);
 
             if (nested != null) {
-                LoggingManager.INSTANCE.fromJson(obj);
+                LoggingManager.INSTANCE.fromJson(nested);
             }
         }
     }
