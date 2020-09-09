@@ -1,18 +1,19 @@
 package eigencraft.motionprint.data;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import eigencraft.motionprint.config.Configs;
+import eigencraft.motionprint.util.JsonUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
-import eigencraft.motionprint.config.Configs;
-import eigencraft.motionprint.util.JsonUtils;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.UUID;
 
 public class LoggingManager {
     public static final LoggingManager INSTANCE = new LoggingManager();

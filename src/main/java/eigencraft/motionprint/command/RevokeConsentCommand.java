@@ -1,12 +1,12 @@
 package eigencraft.motionprint.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import eigencraft.motionprint.data.ConsentTracker;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
-import eigencraft.motionprint.data.ConsentTracker;
 
 public class RevokeConsentCommand {
     public static void registerServerCommand(CommandDispatcher<ServerCommandSource> dispatcher) {

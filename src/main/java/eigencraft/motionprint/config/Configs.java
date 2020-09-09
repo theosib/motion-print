@@ -1,19 +1,17 @@
 package eigencraft.motionprint.config;
 
-import java.io.File;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import eigencraft.motionprint.MotionPrint;
 import eigencraft.motionprint.Reference;
-import eigencraft.motionprint.data.ConsentTracker;
 import eigencraft.motionprint.data.LoggingManager;
 import eigencraft.motionprint.util.JsonUtils;
 
-public class Configs
-{
+import java.io.File;
+
+public class Configs {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static File gameDirectory = new File(".");
 
