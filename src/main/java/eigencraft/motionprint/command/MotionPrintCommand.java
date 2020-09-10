@@ -19,6 +19,7 @@ public class MotionPrintCommand {
                         .then(SubCommandSetEnabled.registerSubCommand(dispatcher))
                         .then(SubCommandSetFlushInterval.registerSubCommand(dispatcher))
                         .then(SubCommandSetLoggingInterval.registerSubCommand(dispatcher))
+                        .then(SubCommandLogScoreboard.registerSubCommand(dispatcher))
         );
     }
 }
