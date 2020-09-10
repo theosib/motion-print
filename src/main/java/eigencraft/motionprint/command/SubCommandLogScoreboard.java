@@ -31,8 +31,7 @@ public class SubCommandLogScoreboard {
 
     private static int logScoreboard(MinecraftServer server, Collection<String> players, ScoreboardObjective objective) {
         for (String player : players) {
-            int score = objective.getScoreboard().getPlayerScore(player, objective).getScore();
-            //LoggingManager.INSTANCE.addLogMessage(server.getPlayerManager().getPlayer(player), String.format("scoreboard %s: %d", objective.getName(), score));
+            int score = server.getScoreboard().getPlayerScore(player,objective).getScore();
             LoggingManager.INSTANCE.addLogDataEntry(server.getPlayerManager().getPlayer(player),
                     ScoreboardDataEntry.of(server.getPlayerManager().getPlayer(player), objective.getName(), score)
             );
