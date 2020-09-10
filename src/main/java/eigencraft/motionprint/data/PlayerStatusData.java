@@ -1,13 +1,12 @@
 package eigencraft.motionprint.data;
 
-import eigencraft.motionprint.util.IPlayerVelocityGetter;
+import javax.annotation.Nullable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-
-import javax.annotation.Nullable;
+import eigencraft.motionprint.util.IPlayerVelocityGetter;
 
 public class PlayerStatusData implements IDataEntry
 {

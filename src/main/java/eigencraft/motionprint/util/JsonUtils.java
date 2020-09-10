@@ -1,16 +1,15 @@
 package eigencraft.motionprint.util;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import eigencraft.motionprint.MotionPrint;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class JsonUtils {
     public static boolean hasBoolean(JsonObject obj, String name) {

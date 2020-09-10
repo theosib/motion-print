@@ -1,16 +1,16 @@
 package eigencraft.motionprint.mixin;
 
-import eigencraft.motionprint.data.LoggingManager;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.server.PlayerManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.dimension.DimensionType;
+import eigencraft.motionprint.data.LoggingManager;
 
 @Mixin(PlayerManager.class)
 public abstract class MixinPlayerManager {

@@ -1,19 +1,18 @@
 package eigencraft.motionprint.data;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.UUID;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import eigencraft.motionprint.Reference;
-import eigencraft.motionprint.config.Configs;
-import eigencraft.motionprint.util.JsonUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.UUID;
+import eigencraft.motionprint.Reference;
+import eigencraft.motionprint.config.Configs;
+import eigencraft.motionprint.util.JsonUtils;
 
 public class ConsentTracker {
     public static final ConsentTracker INSTANCE = new ConsentTracker();
