@@ -18,7 +18,7 @@ import java.util.Collection;
 public class SubCommandLogScoreboard {
     public static CommandNode<ServerCommandSource> registerSubCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralCommandNode<ServerCommandSource> subCommandRootNode = CommandManager.literal("log-scoreboard").build();
-        ArgumentCommandNode<ServerCommandSource, ScoreHolderArgumentType.ScoreHolder> argPlayer = CommandManager.argument("players", ScoreHolderArgumentType.scoreHolder()).build();
+        ArgumentCommandNode<ServerCommandSource, ScoreHolderArgumentType.ScoreHolder> argPlayer = CommandManager.argument("players", ScoreHolderArgumentType.scoreHolders()).suggests(ScoreHolderArgumentType.SUGGESTION_PROVIDER).build();
         ArgumentCommandNode<ServerCommandSource, String> argScoreboard = CommandManager.argument("scoreboard", ObjectiveArgumentType.objective()).executes(
                 c -> logScoreboard(c.getSource().getMinecraftServer(), ScoreHolderArgumentType.getScoreHolders(c, "players"), ObjectiveArgumentType.getObjective(c, "scoreboard"))
         ).build();
