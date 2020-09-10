@@ -115,6 +115,16 @@ public class LoggingManager {
         }
     }
 
+    public void addLogDataEntry(PlayerEntity player,IDataEntry message){
+        if (this.enabled) {
+            PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
+
+            if (logger != null) {
+                logger.logData(message, this.getFlushInterval());
+            }
+        }
+    }
+
     public void addLogMessage(PlayerEntity player, String message) {
         if (this.enabled) {
             PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
