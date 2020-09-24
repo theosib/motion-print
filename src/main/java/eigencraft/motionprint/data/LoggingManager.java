@@ -1,11 +1,10 @@
 package eigencraft.motionprint.data;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import eigencraft.motionprint.api.MotionPrintPlugin;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -17,7 +16,8 @@ import eigencraft.motionprint.util.JsonUtils;
 public class LoggingManager {
     public static final LoggingManager INSTANCE = new LoggingManager();
 
-    protected final Map<UUID, PlayerStatusLogger> playerLoggers = new HashMap<>();
+    protected final HashMap<PlayerEntity, PlayerDataLogger> playerLoggers = new HashMap<>();
+    protected final List<MotionPrintPlugin> plugins = new ArrayList<>();
     protected int flushInterval = 240;
     protected int loggingInterval = 5;
     protected boolean enabled = true;
@@ -28,15 +28,6 @@ public class LoggingManager {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        Configs.writeConfigsToFile();
-    }
-
-    public int getLoggingInterval() {
-        return this.loggingInterval;
-    }
-
-    public void setLoggingInterval(int interval) {
-        this.loggingInterval = interval;
         Configs.writeConfigsToFile();
     }
 
@@ -55,7 +46,7 @@ public class LoggingManager {
     }
 
     public void flushData() {
-        for (PlayerStatusLogger logger : this.playerLoggers.values()) {
+        for (PlayerDataLogger logger : this.playerLoggers.values()) {
             logger.flushData();
         }
     }
@@ -64,25 +55,13 @@ public class LoggingManager {
         MinecraftServer server = source.getMinecraftServer();
 
         if (server != null) {
-            HashSet<UUID> keys = new HashSet<>(this.playerLoggers.keySet());
-            long currentTime = System.currentTimeMillis();
             int count = 0;
 
-            for (UUID uuid : keys) {
-                PlayerStatusLogger logger = this.playerLoggers.get(uuid);
+            for (PlayerDataLogger logger : playerLoggers.values()) {
 
                 if (logger != null) {
-                    logger.flushData();
-                }
-
-                PlayerEntity player = server.getPlayerManager().getPlayer(uuid);
-
-                if (player != null) {
-                    this.playerLoggers.put(uuid, new PlayerStatusLogger(uuid, player.getName().getString(), currentTime));
-                    ++count;
-                }
-                else {
-                    this.playerLoggers.remove(uuid);
+                    logger.rotateSession();
+                    count++;
                 }
             }
 
@@ -94,51 +73,19 @@ public class LoggingManager {
     }
 
     public void onTick(MinecraftServer server, long serverTick) {
-        if (this.enabled && (this.loggingInterval <= 1 || (serverTick % (long) this.loggingInterval) == 0L)) {
-            for (PlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
-
-                if (logger != null) {
-                    logger.logPlayerStatus(player, this.getFlushInterval());
+        if (this.enabled&&((serverTick % (long) this.loggingInterval) == 0L)) {
+            for (MotionPrintPlugin plugin:plugins){
+                if (plugin.isEnabled()) {
+                    plugin.tick(playerLoggers.values());
                 }
             }
         }
     }
 
-    public void onPlayerEvent(PlayerEntity player, String event) {
-        if (this.enabled) {
-            PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
-
-            if (logger != null) {
-                logger.logData(PlayerStatusData.withEvent(player, event), this.getFlushInterval());
-            }
-        }
-    }
-
-    public void addLogDataEntry(PlayerEntity player,IDataEntry message){
-        if (this.enabled) {
-            PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
-
-            if (logger != null) {
-                logger.logData(message, this.getFlushInterval());
-            }
-        }
-    }
-
-    public void addLogMessage(PlayerEntity player, String message) {
-        if (this.enabled) {
-            PlayerStatusLogger logger = this.playerLoggers.get(player.getUuid());
-
-            if (logger != null) {
-                logger.logData(LogMessage.of(player, message), this.getFlushInterval());
-            }
-        }
-    }
-
-    public void addLogger(PlayerEntity player) {
+    public void startLoggingPlayer(PlayerEntity player) {
         UUID uuid = player.getUuid();
 
-        PlayerStatusLogger oldLogger = this.playerLoggers.get(uuid);
+        PlayerDataLogger oldLogger = this.playerLoggers.getOrDefault(player,null);
 
         // The player is already logged in...
         // Flush the old data and create a new logging session
@@ -146,22 +93,32 @@ public class LoggingManager {
             oldLogger.flushData();
         }
 
-        this.playerLoggers.put(uuid, new PlayerStatusLogger(uuid, player.getName().getString(), System.currentTimeMillis()));
+        PlayerDataLogger newLogger = new PlayerDataLogger(uuid, player.getName().getString(), System.currentTimeMillis(),player);
+
+        this.playerLoggers.put(player, newLogger);
+
+        for (MotionPrintPlugin plugin:plugins){
+            plugin.startLogPlayer(newLogger);
+        }
     }
 
-    public void removeLogger(PlayerEntity player) {
+    public void stopLoggingPlayer(PlayerEntity player) {
         UUID uuid = player.getUuid();
-        PlayerStatusLogger logger = this.playerLoggers.get(uuid);
+        PlayerDataLogger logger = this.playerLoggers.getOrDefault(player,null);
+
+        for (MotionPrintPlugin plugin:plugins){
+            plugin.stopLogPlayer(logger);
+        }
 
         if (logger != null) {
             logger.flushData();
-            this.playerLoggers.remove(uuid);
+            this.playerLoggers.remove(player);
         }
     }
 
     public void onPlayerLogin(PlayerEntity player) {
         if (ConsentTracker.INSTANCE.hasPlayerConsented(player)) {
-            this.addLogger(player);
+            this.startLoggingPlayer(player);
 
             player.sendMessage(new LiteralText("You have previously consented to your player status data being logged."));
             player.sendMessage(new LiteralText("If you wish to revoke your consent and stop your data being logged any further, you can use the command"));
@@ -184,7 +141,7 @@ public class LoggingManager {
     }
 
     public void onPlayerLogout(PlayerEntity player) {
-        this.removeLogger(player);
+        this.stopLoggingPlayer(player);
     }
 
     public JsonObject toJson() {
@@ -192,14 +149,35 @@ public class LoggingManager {
 
         obj.add("enabled", new JsonPrimitive(this.isEnabled()));
         obj.add("flush_interval", new JsonPrimitive(this.getFlushInterval()));
-        obj.add("logging_interval", new JsonPrimitive(this.getLoggingInterval()));
+        obj.add("log_interval",new JsonPrimitive(this.getLoggingInterval()));
 
         return obj;
+    }
+
+    public int getLoggingInterval() {
+        return this.loggingInterval;
     }
 
     public void fromJson(JsonObject obj) {
         this.enabled = JsonUtils.getBooleanOrDefault(obj, "enabled", true);
         this.flushInterval = JsonUtils.getIntegerOrDefault(obj, "flush_interval", 240);
         this.loggingInterval = JsonUtils.getIntegerOrDefault(obj, "logging_interval", 5);
+    }
+
+    public void addPlugin(MotionPrintPlugin plugin) {
+        plugins.add(plugin);
+        plugin.enable();
+    }
+
+    public void setLoggingInterval(int interval) {
+        loggingInterval = interval;
+    }
+
+    public Collection<MotionPrintPlugin> getPlugins() {
+        return plugins;
+    }
+
+    public PlayerDataLogger getPlayerDataLogger(PlayerEntity entity) {
+        return playerLoggers.getOrDefault(entity,null);
     }
 }

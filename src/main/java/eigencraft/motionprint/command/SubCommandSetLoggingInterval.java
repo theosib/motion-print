@@ -15,7 +15,7 @@ public class SubCommandSetLoggingInterval {
         LiteralCommandNode<ServerCommandSource> subCommandRootNode = CommandManager.literal("set-logging-interval")
                 .executes(c -> printCurrentValue(c.getSource())).build();
 
-        ArgumentCommandNode<ServerCommandSource, Integer> argInterval = CommandManager.argument("interval", IntegerArgumentType.integer(0, Integer.MAX_VALUE))
+        ArgumentCommandNode<ServerCommandSource, Integer> argInterval = CommandManager.argument("interval", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
                 .executes(c -> setLoggingInterval(c.getSource(), IntegerArgumentType.getInteger(c, "interval")))
                 .build();
 

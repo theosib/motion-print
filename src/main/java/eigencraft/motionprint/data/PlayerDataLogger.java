@@ -10,31 +10,39 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
+
+import eigencraft.motionprint.plugins.location.PlayerStatusDataEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import eigencraft.motionprint.MotionPrint;
 import eigencraft.motionprint.config.Configs;
 
-public class PlayerStatusLogger {
+public class PlayerDataLogger {
     protected final List<IDataEntry> data = new ArrayList<>();
     protected final UUID playerUuid;
     protected final String playerName;
-    protected final long loginTime;
+    protected long loginTime;
+    protected final PlayerEntity playerEntity;
 
-    public PlayerStatusLogger(UUID playerUuid, String playerName, long loginTime) {
+    public PlayerDataLogger(UUID playerUuid, String playerName, long loginTime, PlayerEntity entity) {
         this.playerUuid = playerUuid;
         this.playerName = playerName;
         this.loginTime = loginTime;
+        this.playerEntity = entity;
     }
 
-    public void logPlayerStatus(PlayerEntity player, int flushInterval) {
-        this.logData(PlayerStatusData.of(player), flushInterval);
+    public void rotateSession(){
+        this.flushData();
+        this.loginTime = System.currentTimeMillis();
+        data.clear();
     }
 
-    public void logData(IDataEntry data, int flushInterval) {
-        this.data.add(data);
+    public void logData(IDataEntry data) {
+        if (LoggingManager.INSTANCE.isEnabled()) {
+            this.data.add(data);
 
-        if (this.data.size() > flushInterval) {
-            this.flushData();
+            if (this.data.size() > LoggingManager.INSTANCE.getFlushInterval()) {
+                this.flushData();
+            }
         }
     }
 
@@ -57,7 +65,7 @@ public class PlayerStatusLogger {
         File dir = getOutputDirectory();
 
         if (dir == null) {
-            MotionPrint.logger.error("PlayerStatusLogger::writeDataToFile(): Failed to get the output directory");
+            MotionPrint.logger.error("PlayerDataLogger::writeDataToFile(): Failed to get the output directory");
             return;
         }
 
@@ -66,12 +74,12 @@ public class PlayerStatusLogger {
 
         try {
             if (! outFile.exists() && ! outFile.createNewFile()) {
-                MotionPrint.logger.error("PlayerStatusLogger::writeDataToFile(): Failed to create the file '{}'", fileName);
+                MotionPrint.logger.error("PlayerDataLogger::writeDataToFile(): Failed to create the file '{}'", fileName);
                 return;
             }
         }
         catch (IOException e) {
-            MotionPrint.logger.error("PlayerStatusLogger::writeDataToFile(): Failed to create the file '{}'", fileName, e);
+            MotionPrint.logger.error("PlayerDataLogger::writeDataToFile(): Failed to create the file '{}'", fileName, e);
             return;
         }
 
@@ -81,7 +89,7 @@ public class PlayerStatusLogger {
             }
         }
         catch (IOException e) {
-            MotionPrint.logger.error("PlayerStatusLogger::writeDataToFile(): Exception while writing data to file '{}'", fileName, e);
+            MotionPrint.logger.error("PlayerDataLogger::writeDataToFile(): Exception while writing data to file '{}'", fileName, e);
         }
     }
 
@@ -91,15 +99,19 @@ public class PlayerStatusLogger {
 
         try {
             if (! dir.exists() && ! dir.mkdirs()) {
-                MotionPrint.logger.error("PlayerStatusLogger::getOutputDirectory(): Failed to create the output directory");
+                MotionPrint.logger.error("PlayerDataLogger::getOutputDirectory(): Failed to create the output directory");
                 return null;
             }
         }
         catch (Exception e) {
-            MotionPrint.logger.error("PlayerStatusLogger::getOutputDirectory(): Failed to get the output directory", e);
+            MotionPrint.logger.error("PlayerDataLogger::getOutputDirectory(): Failed to get the output directory", e);
             return null;
         }
 
         return dir;
+    }
+
+    public PlayerEntity getPlayer() {
+        return playerEntity;
     }
 }

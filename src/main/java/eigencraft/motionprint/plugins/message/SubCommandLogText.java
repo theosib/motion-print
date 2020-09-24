@@ -1,9 +1,10 @@
-package eigencraft.motionprint.command;
+package eigencraft.motionprint.plugins.message;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import eigencraft.motionprint.api.MotionPrintUtils;
 import net.minecraft.command.EntitySelector;
 import net.minecraft.command.arguments.EntityArgumentType;
 import net.minecraft.command.arguments.MessageArgumentType;
@@ -29,7 +30,9 @@ public class SubCommandLogText {
     }
 
     private static int logText(ServerPlayerEntity player, Text message) {
-        LoggingManager.INSTANCE.addLogMessage(player, message.getString());
+        if (MessagePlugin.INSTANCE.isEnabled()&& MotionPrintUtils.shouldTrackPlayer(player)){
+            MotionPrintUtils.getPlayerDataLogger(player).logData(LogMessageDataEntry.of(player,message.getString()));
+        }
         return 1;
     }
 }

@@ -1,8 +1,9 @@
-package eigencraft.motionprint.data;
+package eigencraft.motionprint.plugins.scoreboard;
 
+import eigencraft.motionprint.data.IDataEntry;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class ScoreboardDataEntry implements IDataEntry{
+public class ScoreboardDataEntry implements IDataEntry {
     protected final long worldTick;
     protected final String scoreboard_name;
     protected final int score;

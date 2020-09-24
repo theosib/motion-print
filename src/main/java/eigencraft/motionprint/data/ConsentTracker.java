@@ -53,7 +53,7 @@ public class ConsentTracker {
             player.sendMessage(new LiteralText("If you wish to revoke your consent and stop any further of your data being logged, you can use the command"));
             player.sendMessage(new LiteralText("/motion-print-revoke-consent").formatted(Formatting.AQUA));
 
-            LoggingManager.INSTANCE.addLogger(player);
+            LoggingManager.INSTANCE.startLoggingPlayer(player);
             this.writeToFile();
         }
         else {
@@ -68,7 +68,7 @@ public class ConsentTracker {
             this.consentedPlayers.remove(uuid);
             this.optedOutPlayers.add(uuid);
 
-            LoggingManager.INSTANCE.removeLogger(player);
+            LoggingManager.INSTANCE.stopLoggingPlayer(player);
             this.writeToFile();
 
             player.sendMessage(new LiteralText("You have successfully revoked your consent for your player data being logged.").formatted(Formatting.GREEN));

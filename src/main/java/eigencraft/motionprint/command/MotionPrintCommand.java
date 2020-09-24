@@ -14,12 +14,10 @@ public class MotionPrintCommand {
                 CommandManager.literal(baseCommandName)
                         .requires((src) -> src.hasPermissionLevel(permissionLevel))
                         .then(SubCommandFlushData.registerSubCommand(dispatcher))
-                        .then(SubCommandLogText.registerSubCommand(dispatcher))
                         .then(SubCommandRotateSessions.registerSubCommand(dispatcher))
                         .then(SubCommandSetEnabled.registerSubCommand(dispatcher))
                         .then(SubCommandSetFlushInterval.registerSubCommand(dispatcher))
-                        .then(SubCommandSetLoggingInterval.registerSubCommand(dispatcher))
-                        .then(SubCommandLogScoreboard.registerSubCommand(dispatcher))
+                        .then(SubCommandPluginConfiguration.registerSubCommand(dispatcher))
         );
     }
 }

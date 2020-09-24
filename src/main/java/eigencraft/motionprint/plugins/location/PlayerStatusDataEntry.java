@@ -1,6 +1,8 @@
-package eigencraft.motionprint.data;
+package eigencraft.motionprint.plugins.location;
 
 import javax.annotation.Nullable;
+
+import eigencraft.motionprint.data.IDataEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
@@ -8,7 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import eigencraft.motionprint.util.IPlayerVelocityGetter;
 
-public class PlayerStatusData implements IDataEntry
+public class PlayerStatusDataEntry implements IDataEntry
 {
     protected final DimensionType dim;
     protected final Vec3d pos;
@@ -20,8 +22,8 @@ public class PlayerStatusData implements IDataEntry
     protected final boolean onGround;
     @Nullable protected final String event;
 
-    private PlayerStatusData(DimensionType dim, Vec3d pos, Vec3d velocity, float yaw, float pitch,
-                             long worldTick, boolean sneaking, boolean onGround, @Nullable String event) {
+    private PlayerStatusDataEntry(DimensionType dim, Vec3d pos, Vec3d velocity, float yaw, float pitch,
+                                  long worldTick, boolean sneaking, boolean onGround, @Nullable String event) {
         this.dim = dim;
         this.pos = pos;
         this.velocity = velocity;
@@ -46,17 +48,17 @@ public class PlayerStatusData implements IDataEntry
                              this.yaw, this.pitch, onGroundStr, sneakingStr, event);
     }
 
-    public static PlayerStatusData of(PlayerEntity player) {
+    public static PlayerStatusDataEntry of(PlayerEntity player) {
         return withEvent(player, null);
     }
 
-    public static PlayerStatusData withEvent(PlayerEntity player, @Nullable String event) {
+    public static PlayerStatusDataEntry withEvent(PlayerEntity player, @Nullable String event) {
     
         World world = player.getEntityWorld();
         Vec3d pos = player.getPos();
         Vec3d velocity = player instanceof ServerPlayerEntity ? ((IPlayerVelocityGetter) player).getLastVelocity() : Vec3d.ZERO;
 
-        return new PlayerStatusData(world.getDimension().getType(),
+        return new PlayerStatusDataEntry(world.getDimension().getType(),
                                     pos, velocity,
                                     player.getYaw(0f), player.getPitch(0f),
                                     world.getTime(), player.isSneaking(), player.onGround, event);

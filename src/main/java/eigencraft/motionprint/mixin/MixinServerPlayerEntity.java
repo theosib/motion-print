@@ -22,7 +22,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IP
 
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void onPlayerDeath(DamageSource source, CallbackInfo ci) {
-        LoggingManager.INSTANCE.onPlayerEvent((ServerPlayerEntity) (Object) this, "DEATH|" + source.getName());
+        //LoggingManager.INSTANCE.onPlayerEvent((ServerPlayerEntity) (Object) this, "DEATH|" + source.getName());
     }
 
     @Inject(method = "playerTick", at = @At("HEAD"))
