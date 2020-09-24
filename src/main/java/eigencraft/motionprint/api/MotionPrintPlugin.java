@@ -15,6 +15,12 @@ public abstract class MotionPrintPlugin {
     }
 
     private boolean enabled;
+    private String name;
+
+    public MotionPrintPlugin(String name){
+        this.name = name;
+    }
+
     public abstract void onEnabled();
     public abstract void onDisabled();
     public abstract void startLogPlayer(PlayerDataLogger newLogger);
@@ -34,5 +40,9 @@ public abstract class MotionPrintPlugin {
     }
     public boolean isEnabled(){
         return enabled;
+    }
+
+    public String getName(){
+        return name;
     }
 }

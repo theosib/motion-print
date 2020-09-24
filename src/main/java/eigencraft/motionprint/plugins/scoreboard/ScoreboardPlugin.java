@@ -21,6 +21,10 @@ public class ScoreboardPlugin extends MotionPrintPlugin {
 
     public static final ScoreboardPlugin INSTANCE = new ScoreboardPlugin();
 
+    public ScoreboardPlugin() {
+        super("log-scoreboard");
+    }
+
     @Override
     public void onEnabled() {
 

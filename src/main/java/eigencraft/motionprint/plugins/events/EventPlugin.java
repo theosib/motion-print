@@ -9,6 +9,10 @@ public class EventPlugin extends MotionPrintPlugin {
 
     public static final EventPlugin INSTANCE = new EventPlugin();
 
+    public EventPlugin() {
+        super("player-events");
+    }
+
     @Override
     public void onEnabled() {
 

@@ -8,11 +8,8 @@ import eigencraft.motionprint.data.LoggingManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
-public class SubCommandPluginConfiguration {
+public class SubCommandPluginCommands {
     public static CommandNode<ServerCommandSource> registerSubCommand(CommandDispatcher<ServerCommandSource> dispatcher) {
-
-        System.out.print(LoggingManager.INSTANCE.getPlugins().size());
-        System.out.println("plugins");
 
         LiteralArgumentBuilder<ServerCommandSource> subCommandRootNode = CommandManager.literal("plugin");
 

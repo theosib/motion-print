@@ -2,8 +2,11 @@ package eigencraft.motionprint.data;
 
 import java.util.*;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import eigencraft.motionprint.MotionPrint;
 import eigencraft.motionprint.api.MotionPrintPlugin;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -151,6 +154,15 @@ public class LoggingManager {
         obj.add("flush_interval", new JsonPrimitive(this.getFlushInterval()));
         obj.add("log_interval",new JsonPrimitive(this.getLoggingInterval()));
 
+        JsonArray disabledPlugins = new JsonArray();
+        for (MotionPrintPlugin plugin:plugins){
+            if (!plugin.isEnabled()){
+                disabledPlugins.add(new JsonPrimitive(plugin.getName()));
+            }
+        }
+
+        obj.add("disabled_plugins",disabledPlugins);
+
         return obj;
     }
 
@@ -162,6 +174,21 @@ public class LoggingManager {
         this.enabled = JsonUtils.getBooleanOrDefault(obj, "enabled", true);
         this.flushInterval = JsonUtils.getIntegerOrDefault(obj, "flush_interval", 240);
         this.loggingInterval = JsonUtils.getIntegerOrDefault(obj, "logging_interval", 5);
+
+        //Disable plugins
+        for(JsonElement element:JsonUtils.getJsonElementIterableSafe(obj,"disabled_plugins")){
+            if (element.isJsonPrimitive()){
+                if (element.getAsJsonPrimitive().isString()){
+                    String disabledName =  element.getAsJsonPrimitive().getAsString();
+                    for(MotionPrintPlugin plugin:plugins){
+                        if (plugin.getName().equals(disabledName)){
+                            plugin.disable();
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     public void addPlugin(MotionPrintPlugin plugin) {

@@ -17,7 +17,9 @@ public class MotionPrintCommand {
                         .then(SubCommandRotateSessions.registerSubCommand(dispatcher))
                         .then(SubCommandSetEnabled.registerSubCommand(dispatcher))
                         .then(SubCommandSetFlushInterval.registerSubCommand(dispatcher))
-                        .then(SubCommandPluginConfiguration.registerSubCommand(dispatcher))
+                        .then(SubCommandPluginCommands.registerSubCommand(dispatcher))
+                        .then(SubCommandPluginEnable.registerSubCommand(dispatcher))
+                        .then(SubCommandPluginDisable.registerSubCommand(dispatcher))
         );
     }
 }

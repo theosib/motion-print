@@ -9,6 +9,10 @@ public class LocationPlugin extends MotionPrintPlugin {
 
     public static final LocationPlugin INSTANCE = new LocationPlugin();
 
+    public LocationPlugin() {
+        super("player-location");
+    }
+
     @Override
     public void onEnabled() {
     }
@@ -28,8 +32,10 @@ public class LocationPlugin extends MotionPrintPlugin {
 
     @Override
     public void tick(Collection<PlayerDataLogger> players) {
-        for(PlayerDataLogger playerLogger:players){
-            playerLogger.logData(PlayerStatusDataEntry.of(playerLogger.getPlayer()));
+        if (isEnabled()) {
+            for (PlayerDataLogger playerLogger : players) {
+                playerLogger.logData(PlayerStatusDataEntry.of(playerLogger.getPlayer()));
+            }
         }
     }
 }

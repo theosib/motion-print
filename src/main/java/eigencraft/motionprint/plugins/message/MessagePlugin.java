@@ -20,6 +20,10 @@ import java.util.Collection;
 public class MessagePlugin extends MotionPrintPlugin {
     public static final MessagePlugin INSTANCE = new MessagePlugin();
 
+    public MessagePlugin() {
+        super("log-messages");
+    }
+
     @Override
     public void onEnabled() {
 
