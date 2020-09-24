@@ -1,5 +1,10 @@
 package eigencraft.motionprint.data;
 
+import eigencraft.motionprint.MotionPrint;
+import eigencraft.motionprint.config.Configs;
+import net.minecraft.entity.player.PlayerEntity;
+
+import javax.annotation.Nullable;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,12 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import javax.annotation.Nullable;
-
-import eigencraft.motionprint.plugins.location.PlayerStatusDataEntry;
-import net.minecraft.entity.player.PlayerEntity;
-import eigencraft.motionprint.MotionPrint;
-import eigencraft.motionprint.config.Configs;
 
 public class PlayerDataLogger {
     protected final List<IDataEntry> data = new ArrayList<>();
@@ -86,6 +85,7 @@ public class PlayerDataLogger {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outFile, true))) {
             for (String line : lines) {
                 writer.write(line);
+                writer.write(System.lineSeparator());
             }
         }
         catch (IOException e) {

@@ -15,7 +15,7 @@ public class ScoreboardDataEntry implements IDataEntry {
     }
     @Override
     public String getFormattedOutput() {
-        return String.format("%d SCOREBOARD | %s : %d\n", this.worldTick, this.scoreboard_name,this.score);
+        return String.format("%d SCOREBOARD | %s : %d", this.worldTick, this.scoreboard_name,this.score);
     }
 
 

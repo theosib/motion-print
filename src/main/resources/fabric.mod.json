@@ -6,7 +6,8 @@
   "description": "Logs all players' positions and logs them on the server",
   "authors": [
     "AMereBagatelle",
-    "masa"
+    "masa",
+    "recursive_tree"
   ],
   "contact": {
     "issues": "https://github.com/theosib/motion-print/issues",
@@ -21,7 +22,8 @@
     ]
   },
   "mixins": [
-    "motion-print.mixins.json"
+    "motion-print.mixins.json",
+    "events-plugin.mixins.json"
   ],
   "depends": {}
 }

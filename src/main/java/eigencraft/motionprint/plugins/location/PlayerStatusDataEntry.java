@@ -1,14 +1,14 @@
 package eigencraft.motionprint.plugins.location;
 
-import javax.annotation.Nullable;
-
 import eigencraft.motionprint.data.IDataEntry;
+import eigencraft.motionprint.util.IPlayerVelocityGetter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import eigencraft.motionprint.util.IPlayerVelocityGetter;
+
+import javax.annotation.Nullable;
 
 public class PlayerStatusDataEntry implements IDataEntry
 {
@@ -43,7 +43,7 @@ public class PlayerStatusDataEntry implements IDataEntry
         String sneakingStr = this.sneaking ? "S" : "-"; // sneaking vs. not sneaking
         String event = this.event != null ? this.event : "-";
 
-        return String.format("%d p[%.4f %.4f %.4f] v[%.3f %.3f %.3f] %.4f %.4f %s %s %s\n",
+        return String.format("%d p[%.4f %.4f %.4f] v[%.3f %.3f %.3f] %.4f %.4f %s %s %s",
                              this.worldTick, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z,
                              this.yaw, this.pitch, onGroundStr, sneakingStr, event);
     }

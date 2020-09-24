@@ -1,12 +1,12 @@
 {
   "required": true,
-  "package": "eigencraft.motionprint.mixin",
+  "package": "eigencraft.motionprint.plugins.events.mixin",
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinCommandManager",
-    "MixinMinecraftServer",
-    "MixinPlayerManager"
+    "MixinPlayerEntity",
+    "MixinPlayerManager",
+    "MixinServerPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1

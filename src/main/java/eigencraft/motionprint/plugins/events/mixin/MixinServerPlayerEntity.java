@@ -1,17 +1,20 @@
-package eigencraft.motionprint.mixin;
+package eigencraft.motionprint.plugins.events.mixin;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.authlib.GameProfile;
+import eigencraft.motionprint.api.MotionPrintUtils;
+import eigencraft.motionprint.data.PlayerDataLogger;
+import eigencraft.motionprint.plugins.events.EventDataEntry;
+import eigencraft.motionprint.plugins.events.EventPlugin;
+import eigencraft.motionprint.util.IPlayerVelocityGetter;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import eigencraft.motionprint.data.LoggingManager;
-import eigencraft.motionprint.util.IPlayerVelocityGetter;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class MixinServerPlayerEntity extends PlayerEntity implements IPlayerVelocityGetter {
@@ -22,7 +25,10 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IP
 
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void onPlayerDeath(DamageSource source, CallbackInfo ci) {
-        //LoggingManager.INSTANCE.onPlayerEvent((ServerPlayerEntity) (Object) this, "DEATH|" + source.getName());
+        if (EventPlugin.INSTANCE.isEnabled()&& MotionPrintUtils.shouldTrackPlayer((PlayerEntity)((Object)this))){
+            PlayerDataLogger logger = MotionPrintUtils.getPlayerDataLogger((PlayerEntity)((Object)this));
+            logger.logData(new EventDataEntry(String.format("DEATH|%s", source.getName())));
+        }
     }
 
     @Inject(method = "playerTick", at = @At("HEAD"))
