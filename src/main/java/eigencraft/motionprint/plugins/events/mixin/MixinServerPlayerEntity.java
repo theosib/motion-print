@@ -27,7 +27,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements IP
     private void onPlayerDeath(DamageSource source, CallbackInfo ci) {
         if (EventPlugin.INSTANCE.isEnabled()&& MotionPrintUtils.shouldTrackPlayer((PlayerEntity)((Object)this))){
             PlayerDataLogger logger = MotionPrintUtils.getPlayerDataLogger((PlayerEntity)((Object)this));
-            logger.logData(new EventDataEntry(String.format("DEATH|%s", source.getName())));
+            logger.logData(new EventDataEntry(String.format("death %s", source.getName())));
         }
     }
 

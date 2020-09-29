@@ -43,9 +43,9 @@ public class PlayerStatusDataEntry implements IDataEntry
         String sneakingStr = this.sneaking ? "S" : "-"; // sneaking vs. not sneaking
         String event = this.event != null ? this.event : "-";
 
-        return String.format("%d p[%.4f %.4f %.4f] v[%.3f %.3f %.3f] %.4f %.4f %s %s %s",
-                             this.worldTick, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z,
-                             this.yaw, this.pitch, onGroundStr, sneakingStr, event);
+        return String.format("location %.4f %.4f %.4f %.3f %.3f %.3f %.4f %.4f %s %s",
+                             pos.x, pos.y, pos.z, vel.x, vel.y, vel.z,
+                             this.yaw, this.pitch, onGroundStr, sneakingStr);
     }
 
     public static PlayerStatusDataEntry of(PlayerEntity player) {

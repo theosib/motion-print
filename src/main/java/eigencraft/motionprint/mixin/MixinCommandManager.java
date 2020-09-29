@@ -18,6 +18,6 @@ public class MixinCommandManager {
 
         GrantConsentCommand.registerServerCommand(dispatcher);
         RevokeConsentCommand.registerServerCommand(dispatcher);
-        MotionPrintCommand.registerServerCommand(dispatcher);
+        //MotionPrintCommand.registerServerCommand(dispatcher);
     }
 }

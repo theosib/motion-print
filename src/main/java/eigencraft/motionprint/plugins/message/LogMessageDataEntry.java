@@ -13,7 +13,7 @@ public class LogMessageDataEntry implements IDataEntry {
     }
     @Override
     public String getFormattedOutput() {
-        return String.format("%d LOG_MESSAGE | %s", this.worldTick, this.message);
+        return String.format("message %s", this.message);
     }
 
     public static LogMessageDataEntry of(PlayerEntity player, String message) {

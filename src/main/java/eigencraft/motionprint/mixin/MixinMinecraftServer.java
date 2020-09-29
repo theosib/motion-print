@@ -1,6 +1,10 @@
 package eigencraft.motionprint.mixin;
 
 import java.util.function.BooleanSupplier;
+
+import eigencraft.motionprint.command.MotionPrintCommand;
+import net.minecraft.server.command.CommandManager;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +19,8 @@ import eigencraft.motionprint.data.LoggingManager;
 public abstract class MixinMinecraftServer {
     @Shadow private int ticks;
 
+    @Shadow @Final private CommandManager commandManager;
+
     @Inject(method = "tickWorlds", at = @At("RETURN"))
     private void onPostTickWorlds(BooleanSupplier supplier, CallbackInfo ci) {
         LoggingManager.INSTANCE.onTick((MinecraftServer) (Object) this, this.ticks);
@@ -22,6 +28,7 @@ public abstract class MixinMinecraftServer {
 
     @Inject(method = "run", at = @At("HEAD"))
     private void onServerStart(CallbackInfo ci) {
+        MotionPrintCommand.registerServerCommand(commandManager.getDispatcher());
         Configs.readConfigsFromFile(); // note: this creates the config directory if it doesn't exist yet
         ConsentTracker.INSTANCE.readFromFile();
     }

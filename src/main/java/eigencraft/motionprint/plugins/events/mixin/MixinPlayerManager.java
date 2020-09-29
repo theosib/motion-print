@@ -22,7 +22,7 @@ public class MixinPlayerManager {
 
         if (EventPlugin.INSTANCE.isEnabled()&& MotionPrintUtils.shouldTrackPlayer(player)){
             PlayerDataLogger logger = MotionPrintUtils.getPlayerDataLogger(player);
-            logger.logData(new EventDataEntry(String.format("RESPAWN| %s",Registry.DIMENSION_TYPE.getId(player.dimension).toString())));
+            logger.logData(new EventDataEntry(String.format("respawn %s",Registry.DIMENSION_TYPE.getId(player.dimension).toString())));
         }
     }
 
@@ -32,7 +32,7 @@ public class MixinPlayerManager {
 
         if (EventPlugin.INSTANCE.isEnabled()&& MotionPrintUtils.shouldTrackPlayer(player)){
             PlayerDataLogger logger = MotionPrintUtils.getPlayerDataLogger(player);
-            logger.logData(new EventDataEntry(String.format("CHANGED_DIMENSION| %s", Registry.DIMENSION_TYPE.getId(player.dimension).toString())));
+            logger.logData(new EventDataEntry(String.format("changed_dimension %s", Registry.DIMENSION_TYPE.getId(player.dimension).toString())));
         }
     }
 }

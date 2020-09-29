@@ -6,6 +6,7 @@ import eigencraft.motionprint.plugins.events.EventDataEntry;
 import eigencraft.motionprint.plugins.events.EventPlugin;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +19,7 @@ public class MixinPlayerEntity {
     private void onPlayerDamaged(DamageSource source, float amount, CallbackInfo ci) {
         if (EventPlugin.INSTANCE.isEnabled()&& MotionPrintUtils.shouldTrackPlayer((PlayerEntity)((Object)this))){
             PlayerDataLogger logger = MotionPrintUtils.getPlayerDataLogger((PlayerEntity)((Object)this));
-            logger.logData(new EventDataEntry(String.format("DAMAGE|%s|%.3f", source.getName(), amount)));
+            logger.logData(new EventDataEntry(String.format("damage %s %.3f", source.getName(), amount)));
         }
         //LoggingManager.INSTANCE.onPlayerEvent((ServerPlayerEntity) (Object) this, String.format("DAMAGE|%s|%.3f", source.getName(), amount));
     }

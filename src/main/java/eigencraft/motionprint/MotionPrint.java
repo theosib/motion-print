@@ -5,6 +5,7 @@ import eigencraft.motionprint.plugins.events.EventPlugin;
 import eigencraft.motionprint.plugins.location.LocationPlugin;
 import eigencraft.motionprint.plugins.message.MessagePlugin;
 import eigencraft.motionprint.plugins.scoreboard.ScoreboardPlugin;
+import eigencraft.motionprint.plugins.time.TimePlugin;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,9 @@ public class MotionPrint implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        //Always leave timePlugin at the beginning
+        MotionPrintPlugin.register(TimePlugin.INSTANCE);
+
         MotionPrintPlugin.register(LocationPlugin.INSTANCE);
         MotionPrintPlugin.register(ScoreboardPlugin.INSTANCE);
         MotionPrintPlugin.register(MessagePlugin.INSTANCE);

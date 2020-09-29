@@ -3,7 +3,7 @@ package eigencraft.motionprint.plugins.events;
 import eigencraft.motionprint.data.IDataEntry;
 
 public class EventDataEntry implements IDataEntry {
-    private String event;
+    private final String event;
 
     public EventDataEntry(String event) {
         this.event = event;
@@ -11,6 +11,6 @@ public class EventDataEntry implements IDataEntry {
 
     @Override
     public String getFormattedOutput() {
-        return this.event;
+        return String.format("event %s",this.event);
     }
 }
