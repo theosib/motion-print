@@ -152,7 +152,7 @@ public class LoggingManager {
 
         obj.add("enabled", new JsonPrimitive(this.isEnabled()));
         obj.add("flush_interval", new JsonPrimitive(this.getFlushInterval()));
-        obj.add("log_interval",new JsonPrimitive(this.getLoggingInterval()));
+        obj.add("logging_interval",new JsonPrimitive(this.getLoggingInterval()));
 
         JsonArray disabledPlugins = new JsonArray();
         for (MotionPrintPlugin plugin:plugins){
